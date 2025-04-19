@@ -18,7 +18,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <Analytics />
-        <body className="w-screen h-screen bg-black">
+        <body className="w-screen h-screen bg-gray-500">
           <QueryClientProvider>{children}</QueryClientProvider>
         </body>
       </html>
