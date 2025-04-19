@@ -6,10 +6,10 @@ type Props = {
   };
 };
 
-const Page = ({ params }: Props) => {
+const Page = ({ params: { cosmosId } }: Props) => {
   return (
     <div className="w-full h-full flex justify-center items-center text-[#4C4F69]">
-      Current Cosmos ID: {params.cosmosId}
+      Current Cosmos ID: {cosmosId}
     </div>
   );
 };
