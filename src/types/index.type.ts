@@ -8,12 +8,12 @@ export type CosmosProps = {
       name: string;
       plan: "PUBLIC" | "PERSONAL";
     }[];
-    member: {
+    cosmosmembers: {
       Cosmos: {
         id: string;
         name: string;
         plan: "PUBLIC" | "PERSONAL";
-      }[];
-    };
+      };
+    }[];
   };
 };
