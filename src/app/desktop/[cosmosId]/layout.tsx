@@ -1,7 +1,18 @@
-import { verifyAccessToCosmos } from "@/actions/cosmos";
-import { onAuthenticateUser } from "@/actions/user";
+import {
+  getAllUserVideos,
+  getCosmos,
+  getCosmosFolders,
+  verifyAccessToCosmos,
+} from "@/actions/cosmos";
+import { getNotifications, onAuthenticateUser } from "@/actions/user";
 import { redirect } from "next/navigation";
 import React from "react";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import Desktop from "@/components/desktop";
 
 type Props = {
   params: {
@@ -16,7 +27,38 @@ const CosmosLayout = async ({ params: { cosmosId }, children }: Props) => {
   if (!auth.user?.cosmos) redirect("/auth/sign-in");
   if (!auth.user.cosmos.length) redirect("/auth/sign-in");
   const hasAccess = await verifyAccessToCosmos(cosmosId);
-  return <div className="h-screen w-screen overfl">{children}</div>;
+
+  if (hasAccess.status !== 200) {
+    redirect(`/desktop/${auth.user?.cosmos[0].id}`);
+  }
+  if (!hasAccess.data?.cosmos) return null;
+
+  const query = new QueryClient();
+
+  await query.prefetchQuery({
+    queryKey: ["cosmos-folders"],
+    queryFn: () => getCosmosFolders(cosmosId),
+  });
+  await query.prefetchQuery({
+    queryKey: ["user-videos"],
+    queryFn: () => getAllUserVideos(cosmosId),
+  });
+  await query.prefetchQuery({
+    queryKey: ["user-cosmos"],
+    queryFn: () => getCosmos(),
+  });
+  await query.prefetchQuery({
+    queryKey: ["user-notifications"],
+    queryFn: () => getNotifications(),
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(query)}>
+      <div className="flex h-screen w-screen">
+        <Desktop activeCosmosId={cosmosId} />
+      </div>
+    </HydrationBoundary>
+  );
 };
 
 export default CosmosLayout;

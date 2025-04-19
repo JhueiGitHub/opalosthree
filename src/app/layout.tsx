@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { ClerkProvider } from "@clerk/nextjs";
+import QueryClientProvider from "@/react-query";
 
 export const metadata: Metadata = {
   title: "OrionOS",
@@ -17,7 +18,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <Analytics />
-        <body className="w-screen h-screen bg-black">{children}</body>
+        <body className="w-screen h-screen bg-black">
+          <QueryClientProvider>{children}</QueryClientProvider>
+        </body>
       </html>
     </ClerkProvider>
   );
