@@ -19,7 +19,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <Analytics />
-        <body className="w-screen h-screen bg-gray-500">
+        <body className="w-screen h-screen bg-[#4C4F69]">
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

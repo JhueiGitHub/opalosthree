@@ -16,9 +16,34 @@ import { Separator } from "../ui/separator";
 import { userQueryData } from "@/hooks/userQueryData";
 import { getCosmos } from "@/actions/cosmos";
 import { CosmosProps } from "@/types/index.type";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 type Props = {
   activeCosmosId: string;
+};
+
+const IconButton: React.FC<{ src: string; onClick?: () => void }> = ({
+  src,
+  onClick,
+}) => {
+  return (
+    <motion.button
+      className="relative p-2 rounded-md flex items-center justify-center hover:bg-white/5"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={onClick}
+    >
+      <motion.img
+        src={src}
+        alt="System Icon"
+        className="w-4 h-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1 }}
+      />
+    </motion.button>
+  );
 };
 
 const MenuBar = ({ activeCosmosId }: Props) => {
@@ -34,13 +59,20 @@ const MenuBar = ({ activeCosmosId }: Props) => {
 
   console.log(activeCosmosId);
   return (
-    <div className="w-full h-[200px] flex items-start">
+    <div className="w-full h-[32px] flex items-start bg-black/60">
       <Select
         defaultValue={activeCosmosId}
         onValueChange={onChangeActiveCosmos}
       >
-        <SelectTrigger className="text-neutral-400 w-[180px]">
-          <SelectValue placeholder="Select a Cosmos"></SelectValue>
+        <SelectTrigger className="text-neutral-400 w-[39px] h-[32px]">
+          <SelectValue placeholder="Select a Cosmos">
+            <Image
+              src="/icns/system/_dopa.png"
+              alt="hmm"
+              width="16"
+              height="16"
+            />
+          </SelectValue>
         </SelectTrigger>
         <SelectContent className="backdrop-blur-xl">
           <SelectGroup>
