@@ -39,12 +39,12 @@ const MenuBar = ({ activeCosmosId }: Props) => {
         defaultValue={activeCosmosId}
         onValueChange={onChangeActiveCosmos}
       >
-        <SelectTrigger className="text-black w-[180px]">
+        <SelectTrigger className="text-neutral-400 w-[180px]">
           <SelectValue placeholder="Select a Cosmos"></SelectValue>
         </SelectTrigger>
         <SelectContent className="backdrop-blur-xl">
           <SelectGroup>
-            <SelectLabel></SelectLabel>
+            <SelectLabel>Cosmos'</SelectLabel>
           </SelectGroup>
           <Separator />
           {cosmos.cosmos.map((cosmos) => (

@@ -3,6 +3,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import QueryClientProvider from "@/react-query";
+import { ThemeProvider } from "@/components/theme";
 
 export const metadata: Metadata = {
   title: "OrionOS",
@@ -19,7 +20,13 @@ export default function RootLayout({
       <html lang="en">
         <Analytics />
         <body className="w-screen h-screen bg-gray-500">
-          <QueryClientProvider>{children}</QueryClientProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            disableTransitionOnChange
+          >
+            <QueryClientProvider>{children}</QueryClientProvider>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
