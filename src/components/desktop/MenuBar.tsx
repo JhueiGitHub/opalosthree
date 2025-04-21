@@ -18,6 +18,9 @@ import { getCosmos } from "@/actions/cosmos";
 import { CosmosProps } from "@/types/index.type";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Modal from "../modal";
+import { PlusCircle } from "lucide-react";
+import Search from "../search";
 
 type Props = {
   activeCosmosId: string;
@@ -93,6 +96,23 @@ const MenuBar = ({ activeCosmosId }: Props) => {
                   </SelectItem>
                 )
             )}
+          <Modal
+            trigger={
+              <span className="text-sm pt-[6px] cursor-pointer flex items-center justify-center bg-neutral-800/90 hover:bg-neutral-800/60 w-full rounded-sm p-[5px] gap-2">
+                <PlusCircle
+                  size={15}
+                  className="text-neutral-800/90 fill-neutral-500"
+                />
+                <span className="text-neutral-400 font-semibold text-xs">
+                  Invite To Cosmos
+                </span>
+              </span>
+            }
+            title="Invite To Cosmos"
+            description="Invite other users to your cosmos"
+          >
+            <Search cosmosId={activeCosmosId} />
+          </Modal>
         </SelectContent>
       </Select>
     </div>
