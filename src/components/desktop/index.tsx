@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import MenuBar from "./MenuBar";
+import MenuBar from "./menu-bar";
 
 type Props = {
   activeCosmosId: string;

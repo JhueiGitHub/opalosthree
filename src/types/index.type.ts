@@ -6,14 +6,23 @@ export type CosmosProps = {
     cosmos: {
       id: string;
       name: string;
-      plan: "PUBLIC" | "PERSONAL";
+      type: "PUBLIC" | "PERSONAL";
     }[];
     cosmosmembers: {
       Cosmos: {
         id: string;
         name: string;
-        plan: "PUBLIC" | "PERSONAL";
+        type: "PUBLIC" | "PERSONAL";
       };
     }[];
+  };
+};
+
+export type NotificationProps = {
+  status: number;
+  data: {
+    _count: {
+      notification: number;
+    };
   };
 };

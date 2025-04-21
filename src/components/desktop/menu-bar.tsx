@@ -10,17 +10,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import "../../app/globals.css";
 import { Separator } from "../ui/separator";
 import { userQueryData } from "@/hooks/userQueryData";
 import { getCosmos } from "@/actions/cosmos";
-import { CosmosProps } from "@/types/index.type";
+import { CosmosProps, NotificationProps } from "@/types/index.type";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Modal from "../modal";
 import { PlusCircle } from "lucide-react";
 import Search from "../search";
+import { MENU_ITEMS } from "@/constants";
+import MenuBarItem from "./menu-bar-item";
+import { getNotifications } from "@/actions/user";
 
 type Props = {
   activeCosmosId: string;
@@ -51,18 +54,28 @@ const IconButton: React.FC<{ src: string; onClick?: () => void }> = ({
 
 const MenuBar = ({ activeCosmosId }: Props) => {
   const router = useRouter();
+  const pathName = usePathname();
 
   const { data, isFetched } = userQueryData(["user-cosmos"], getCosmos);
+  const menuItems = MENU_ITEMS(activeCosmosId);
+
+  const { data: notifications } = userQueryData(
+    ["user-notifications"],
+    getNotifications
+  );
 
   const { data: cosmos } = data as CosmosProps;
+  const { data: count } = notifications as NotificationProps;
 
   const onChangeActiveCosmos = (value: string) => {
     router.push(`/desktop/${value}`);
   };
 
+  const currentCosmos = cosmos.cosmos.find((s) => s.id === activeCosmosId);
+
   console.log(activeCosmosId);
   return (
-    <div className="w-full h-[32px] flex items-start bg-black/60">
+    <div className="w-full h-[32px] flex items-start bg-black/60 backdrop-blur-xl">
       <Select
         defaultValue={activeCosmosId}
         onValueChange={onChangeActiveCosmos}
@@ -96,23 +109,46 @@ const MenuBar = ({ activeCosmosId }: Props) => {
                   </SelectItem>
                 )
             )}
-          <Modal
-            trigger={
-              <span className="text-sm pt-[6px] cursor-pointer flex items-center justify-center bg-neutral-800/90 hover:bg-neutral-800/60 w-full rounded-sm p-[5px] gap-2">
-                <PlusCircle
-                  size={15}
-                  className="text-neutral-800/90 fill-neutral-500"
+          {currentCosmos?.type === "PUBLIC" &&
+            cosmos.subscription?.plan == "PRO" && (
+              <Modal
+                trigger={
+                  <span className="text-sm pt-[6px] cursor-pointer flex items-center justify-center bg-neutral-800/90 hover:bg-neutral-800/60 w-full rounded-sm p-[5px] gap-2">
+                    <PlusCircle
+                      size={15}
+                      className="text-neutral-800/90 fill-neutral-500"
+                    />
+                    <span className="text-neutral-400 font-semibold text-xs">
+                      Invite To Cosmos
+                    </span>
+                  </span>
+                }
+                title="Invite To Cosmos"
+                description="Invite other users to your cosmos"
+              >
+                <Search cosmosId={activeCosmosId} />
+              </Modal>
+            )}
+          <p className="w-full text-[#9D9D9D] font-bold mt-4 pl-1">Menu</p>
+          <nav className="w-full">
+            <ul>
+              {menuItems.map((item) => (
+                <MenuBarItem
+                  href={item.href}
+                  icon={item.icon}
+                  selected={pathName === item.href}
+                  title={item.title}
+                  key={item.title}
+                  notifications={
+                    (item.title === "Notifications" &&
+                      count._count &&
+                      count._count.notification) ||
+                    0
+                  }
                 />
-                <span className="text-neutral-400 font-semibold text-xs">
-                  Invite To Cosmos
-                </span>
-              </span>
-            }
-            title="Invite To Cosmos"
-            description="Invite other users to your cosmos"
-          >
-            <Search cosmosId={activeCosmosId} />
-          </Modal>
+              ))}
+            </ul>
+          </nav>
         </SelectContent>
       </Select>
     </div>
