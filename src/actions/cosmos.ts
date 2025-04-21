@@ -18,7 +18,7 @@ export const verifyAccessToCosmos = async (cosmosId: string) => {
             },
           },
           {
-            cosmosmembers: {
+            members: {
               every: {
                 User: {
                   clerkid: user.id,
@@ -129,7 +129,7 @@ export const getCosmos = async () => {
             cosmostype: true,
           },
         },
-        cosmosmembers: {
+        members: {
           select: {
             Cosmos: {
               select: {

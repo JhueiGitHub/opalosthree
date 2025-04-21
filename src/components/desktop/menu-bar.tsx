@@ -24,6 +24,7 @@ import Search from "../search";
 import { MENU_ITEMS } from "@/constants";
 import MenuBarItem from "./menu-bar-item";
 import { getNotifications } from "@/actions/user";
+import CosmosPlaceholder from "./cosmos-placeholder";
 
 type Props = {
   activeCosmosId: string;
@@ -100,8 +101,8 @@ const MenuBar = ({ activeCosmosId }: Props) => {
               {cosmos.name}
             </SelectItem>
           ))}
-          {cosmos.cosmosmembers.length > 0 &&
-            cosmos.cosmosmembers.map(
+          {cosmos.members.length > 0 &&
+            cosmos.members.map(
               (cosmos) =>
                 cosmos.Cosmos && (
                   <SelectItem key="cosmos.Cosmos.id" value="cosmos.Cosmos.id">
@@ -147,6 +148,56 @@ const MenuBar = ({ activeCosmosId }: Props) => {
                   }
                 />
               ))}
+            </ul>
+          </nav>
+          <Separator className="w-4/5" />
+          <p className="w-full text-[#9D9D9D] font-bold mt-4 pl-1">Cosmos'</p>
+
+          {cosmos.cosmos.length === 1 && cosmos.members.length === 0 && (
+            <div className="w-full mt-[6px]">
+              <p className="text-[#3C3C3C] font-medium text-sm">
+                {cosmos.subscription?.plan === "FREE"
+                  ? "Upgrade to create cosmos"
+                  : "No Cosmos"}
+              </p>
+            </div>
+          )}
+
+          <nav className="w-full">
+            <ul className="h-[150px] overflow-auto overflow-x-hidden fade-layer">
+              {cosmos.cosmos.length > 0 &&
+                cosmos.cosmos.map(
+                  (item) =>
+                    item.type !== "PERSONAL" && (
+                      <MenuBarItem
+                        href={`/desktop/${item.id}`}
+                        selected={pathName === `/desktop/${item.id}`}
+                        title={item.name}
+                        notifications={0}
+                        key={item.name}
+                        icon={
+                          <CosmosPlaceholder>
+                            {item.name.charAt(0)}
+                          </CosmosPlaceholder>
+                        }
+                      />
+                    )
+                )}
+              {cosmos.members.length > 0 &&
+                cosmos.members.map((item) => (
+                  <MenuBarItem
+                    href={`/desktop/${item.Cosmos.id}`}
+                    selected={pathName === `/desktop/${item.Cosmos.id}`}
+                    title={item.Cosmos.name}
+                    notifications={0}
+                    key={item.Cosmos.name}
+                    icon={
+                      <CosmosPlaceholder>
+                        {item.Cosmos.name.charAt(0)}
+                      </CosmosPlaceholder>
+                    }
+                  />
+                ))}
             </ul>
           </nav>
         </SelectContent>

@@ -8,7 +8,7 @@ export type CosmosProps = {
       name: string;
       type: "PUBLIC" | "PERSONAL";
     }[];
-    cosmosmembers: {
+    members: {
       Cosmos: {
         id: string;
         name: string;
