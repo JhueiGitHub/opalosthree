@@ -25,6 +25,9 @@ import { MENU_ITEMS } from "@/constants";
 import MenuBarItem from "./menu-bar-item";
 import { getNotifications } from "@/actions/user";
 import CosmosPlaceholder from "./cosmos-placeholder";
+import GlobalCard from "../global/global-card";
+import { Button } from "../ui/button";
+import Loader from "../global/loader";
 
 type Props = {
   activeCosmosId: string;
@@ -54,6 +57,7 @@ const IconButton: React.FC<{ src: string; onClick?: () => void }> = ({
 };
 
 const MenuBar = ({ activeCosmosId }: Props) => {
+  //WIP: Wire up Upgrade button
   const router = useRouter();
   const pathName = usePathname();
 
@@ -91,7 +95,7 @@ const MenuBar = ({ activeCosmosId }: Props) => {
             />
           </SelectValue>
         </SelectTrigger>
-        <SelectContent className="backdrop-blur-xl">
+        <SelectContent className="backdrop-blur-xl w-[240px]">
           <SelectGroup>
             <SelectLabel>Cosmos'</SelectLabel>
           </SelectGroup>
@@ -154,7 +158,7 @@ const MenuBar = ({ activeCosmosId }: Props) => {
           <p className="w-full text-[#9D9D9D] font-bold mt-4 pl-1">Cosmos'</p>
 
           {cosmos.cosmos.length === 1 && cosmos.members.length === 0 && (
-            <div className="w-full mt-[6px]">
+            <div className="w-full mt-[6px] pl-1">
               <p className="text-[#3C3C3C] font-medium text-sm">
                 {cosmos.subscription?.plan === "FREE"
                   ? "Upgrade to create cosmos"
@@ -200,6 +204,17 @@ const MenuBar = ({ activeCosmosId }: Props) => {
                 ))}
             </ul>
           </nav>
+          {cosmos.subscription?.plan === "FREE" && (
+            <GlobalCard
+              title="Upgrade to Pro"
+              description="Unlock AI features like transcription, AI summary, and more."
+              footer={
+                <Button className="text-sm w-full mt-2 bg-[#4C4F69]">
+                  <Loader>Upgrade</Loader>
+                </Button>
+              }
+            ></GlobalCard>
+          )}
         </SelectContent>
       </Select>
     </div>
