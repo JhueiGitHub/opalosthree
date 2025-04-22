@@ -212,17 +212,19 @@ const MenuBar = ({ activeCosmosId }: Props) => {
                     ))}
                 </ul>
               </nav>
-              {cosmos.subscription?.plan === "FREE" && (
-                <GlobalCard
-                  title="Upgrade to Pro"
-                  description="Unlock AI features like transcription, AI summary, and more."
-                  footer={
-                    <Button className="text-sm w-full mt-2 bg-[#4C4F69]">
-                      <Loader>Upgrade</Loader>
-                    </Button>
-                  }
-                ></GlobalCard>
-              )}
+              <div className="fixed bottom-0 w-[170px]">
+                {cosmos.subscription?.plan === "FREE" && (
+                  <GlobalCard
+                    title="Upgrade to Pro"
+                    description="Unlock AI features like transcription, AI summary, and more."
+                    footer={
+                      <Button className="text-sm w-full mt-2 bg-[#4C4F69]">
+                        <Loader>Upgrade</Loader>
+                      </Button>
+                    }
+                  ></GlobalCard>
+                )}
+              </div>
             </div>
             <div className="h-full w-[1569px] flex flex-col">
               <InfoBar />
