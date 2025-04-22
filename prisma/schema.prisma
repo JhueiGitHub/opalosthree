@@ -14,105 +14,70 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email          String          @unique
-  firstname      String?
-  lastname       String?
-  createdAt      DateTime        @default(now())
-  clerkid        String          @unique
-  studio         Media?
-  cosmos         Cosmos[]
-  cosmosvideos   CosmosVideo[]
-  cosmoscomment  CosmosComment[]
-  members        Member[]
-  cosmossender   CosmosInvite[]  @relation("cosmossender")
-  cosmosreciever CosmosInvite[]  @relation("cosmosreciever")
-  image          String?
-  workspace      WorkSpace[]
-  videos         Video[]
-  subscription   Subscription?
-  opalmembers    OpalMember[]
-  notification   Notification[]
-  sender         Invite[]        @relation("sender")
-  reciever       Invite[]        @relation("reciever")
-  trial          Boolean         @default(false)
-  firstView      Boolean         @default(false)
-  comment        Comment[]
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String         @unique
+  firstname    String?
+  lastname     String?
+  createdAt    DateTime       @default(now())
+  clerkid      String         @unique
+  studio       Media?
+  cosmos       Cosmos[]
+  videos       Video[]
+  comment      Comment[]
+  members      Member[]
+  sender       Invite[]       @relation("sender")
+  reciever     Invite[]       @relation("reciever")
+  image        String?
+  workspace    WorkSpace[]
+  opalvideos   OpalVideo[]
+  subscription Subscription?
+  opalmembers  OpalMember[]
+  notification Notification[]
+  opalsender   OpalInvite[]   @relation("opalsender")
+  opalreciever OpalInvite[]   @relation("opalreciever")
+  trial        Boolean        @default(false)
+  firstView    Boolean        @default(false)
+  opalcomment  OpalComment[]
 }
 
 model Cosmos {
-  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  cosmostype    CosmosType
-  name          String
-  User          User?          @relation(fields: [userId], references: [id])
-  userId        String?        @db.Uuid
-  createdAt     DateTime       @default(now())
-  cosmosfolders CosmosFolder[]
-  cosmosvideos  CosmosVideo[]
-  members       Member[]
-  cosmosinvite  CosmosInvite[]
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type Type
+  name       String
+  User       User?      @relation(fields: [userId], references: [id])
+  userId     String?    @db.Uuid
+  createdAt  DateTime   @default(now())
+  folders    Folder[]
+  videos     Video[]
+  members    Member[]
+  invite     Invite[]
 }
 
-model CosmosFolder {
-  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name         String        @default("Untitled Folder")
-  createdAt    DateTime      @default(now())
-  Cosmos       Cosmos?       @relation(fields: [cosmosId], references: [id])
-  cosmosId     String?       @db.Uuid
-  cosmosvideos CosmosVideo[]
+model Folder {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String   @default("Untitled Folder")
+  createdAt DateTime @default(now())
+  Cosmos    Cosmos?  @relation(fields: [cosmosId], references: [id])
+  cosmosId  String?  @db.Uuid
+  videos    Video[]
 }
 
-model CosmosVideo {
-  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title          String?         @default("Untilted Video")
-  description    String?         @default("No Description")
-  source         String          @unique
-  createdAt      DateTime        @default(now())
-  CosmosFolder   CosmosFolder?   @relation(fields: [cosmosfolderId], references: [id], onDelete: Cascade)
-  cosmosfolderId String?         @db.Uuid
-  User           User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         String?         @db.Uuid
-  processing     Boolean         @default(true)
-  Cosmos         Cosmos?         @relation(fields: [cosmosId], references: [id], onDelete: Cascade)
-  cosmosId       String?         @db.Uuid
-  views          Int             @default(0)
-  summery        String?
-  CosmosComment  CosmosComment[]
-}
-
-model CosmosComment {
-  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  comment       String
-  reply         CosmosComment[] @relation("reply")
-  CosmosComment CosmosComment?  @relation("reply", fields: [commentId], references: [id])
-  commentId     String?         @db.Uuid
-  User          User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String?         @db.Uuid
-  CosmosVideo   CosmosVideo?    @relation(fields: [cosmosvideoId], references: [id], onDelete: Cascade)
-  cosmosvideoId String?         @db.Uuid
-  createdAt     DateTime        @default(now())
-}
-
-model Member {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  User        User?    @relation(fields: [userId], references: [id])
-  userId      String?  @db.Uuid
-  createdAt   DateTime @default(now())
-  member      Boolean  @default(true)
-  Cosmos      Cosmos?  @relation(fields: [workSpaceId], references: [id])
-  workSpaceId String?  @db.Uuid
-}
-
-model CosmosInvite {
-  id               String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  cosmossender     User?   @relation("cosmossender", fields: [cosmossenderId], references: [id])
-  cosmossenderId   String? @db.Uuid
-  cosmosreciever   User?   @relation("cosmosreciever", fields: [cosmosrecieverId], references: [id])
-  cosmosrecieverId String? @db.Uuid
-  content          String
-  Cosmos           Cosmos? @relation(fields: [cosmosId], references: [id])
-  cosmosId         String? @db.Uuid
-  accepted         Boolean @default(false)
+model Video {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String?   @default("Untilted Video")
+  description String?   @default("No Description")
+  source      String    @unique
+  createdAt   DateTime  @default(now())
+  Folder      Folder?   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId    String?   @db.Uuid
+  User        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?   @db.Uuid
+  processing  Boolean   @default(true)
+  Cosmos      Cosmos?   @relation(fields: [cosmosId], references: [id], onDelete: Cascade)
+  cosmosId    String?   @db.Uuid
+  views       Int       @default(0)
+  summery     String?
+  Comment     Comment[]
 }
 
 model Comment {
@@ -126,6 +91,41 @@ model Comment {
   Video     Video?    @relation(fields: [videoId], references: [id], onDelete: Cascade)
   videoId   String?   @db.Uuid
   createdAt DateTime  @default(now())
+}
+
+model Member {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      String?  @db.Uuid
+  createdAt   DateTime @default(now())
+  member      Boolean  @default(true)
+  Cosmos      Cosmos?  @relation(fields: [workSpaceId], references: [id])
+  workSpaceId String?  @db.Uuid
+}
+
+model Invite {
+  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sender     User?   @relation("sender", fields: [senderId], references: [id])
+  senderId   String? @db.Uuid
+  reciever   User?   @relation("reciever", fields: [recieverId], references: [id])
+  recieverId String? @db.Uuid
+  content    String
+  Cosmos     Cosmos? @relation(fields: [cosmosId], references: [id])
+  cosmosId   String? @db.Uuid
+  accepted   Boolean @default(false)
+}
+
+model OpalComment {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  opalcomment   String
+  reply         OpalComment[] @relation("reply")
+  OpalComment   OpalComment?  @relation("reply", fields: [opalcommentId], references: [id])
+  opalcommentId String?       @db.Uuid
+  User          User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String?       @db.Uuid
+  OpalVideo     OpalVideo?    @relation(fields: [opalvideoId], references: [id], onDelete: Cascade)
+  opalvideoId   String?       @db.Uuid
+  createdAt     DateTime      @default(now())
 }
 
 model Subscription {
@@ -150,42 +150,42 @@ model Media {
 
 model WorkSpace {
   id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  type        Type
+  workspacetype        WorkspaceType
   name        String
   User        User?        @relation(fields: [userId], references: [id])
   userId      String?      @db.Uuid
   createdAt   DateTime     @default(now())
-  folders     Folder[]
-  videos      Video[]
+  opalfolders OpalFolder[]
+  opalvideos  OpalVideo[]
   opalmembers OpalMember[]
-  invite      Invite[]
+  opalinvite  OpalInvite[]
 }
 
-model Folder {
-  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String     @default("Untitled Folder")
-  createdAt   DateTime   @default(now())
-  WorkSpace   WorkSpace? @relation(fields: [workSpaceId], references: [id])
-  workSpaceId String?    @db.Uuid
-  videos      Video[]
+model OpalFolder {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String      @default("Untitled Folder")
+  createdAt   DateTime    @default(now())
+  WorkSpace   WorkSpace?  @relation(fields: [workSpaceId], references: [id])
+  workSpaceId String?     @db.Uuid
+  opalvideos  OpalVideo[]
 }
 
-model Video {
-  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title       String?    @default("Untilted Video")
-  description String?    @default("No Description")
-  source      String     @unique
-  createdAt   DateTime   @default(now())
-  Folder      Folder?    @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  folderId    String?    @db.Uuid
-  User        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String?    @db.Uuid
-  processing  Boolean    @default(true)
-  WorkSpace   WorkSpace? @relation(fields: [workSpaceId], references: [id], onDelete: Cascade)
-  workSpaceId String?    @db.Uuid
-  views       Int        @default(0)
-  summery     String?
-  Comment     Comment[]
+model OpalVideo {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title        String?       @default("Untilted Video")
+  description  String?       @default("No Description")
+  source       String        @unique
+  createdAt    DateTime      @default(now())
+  OpalFolder   OpalFolder?   @relation(fields: [opalfolderId], references: [id], onDelete: Cascade)
+  opalfolderId String?       @db.Uuid
+  User         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String?       @db.Uuid
+  processing   Boolean       @default(true)
+  WorkSpace    WorkSpace?    @relation(fields: [workSpaceId], references: [id], onDelete: Cascade)
+  workSpaceId  String?       @db.Uuid
+  views        Int           @default(0)
+  summery      String?
+  OpalComment  OpalComment[]
 }
 
 model OpalMember {
@@ -205,24 +205,24 @@ model Notification {
   content String
 }
 
-model Invite {
-  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  sender      User?      @relation("sender", fields: [senderId], references: [id])
-  senderId    String?    @db.Uuid
-  reciever    User?      @relation("reciever", fields: [recieverId], references: [id])
-  recieverId  String?    @db.Uuid
-  content     String
-  WorkSpace   WorkSpace? @relation(fields: [workSpaceId], references: [id])
-  workSpaceId String?    @db.Uuid
-  accepted    Boolean    @default(false)
+model OpalInvite {
+  id             String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  opalsender     User?      @relation("opalsender", fields: [opalsenderId], references: [id])
+  opalsenderId   String?    @db.Uuid
+  opalreciever   User?      @relation("opalreciever", fields: [opalrecieverId], references: [id])
+  opalrecieverId String?    @db.Uuid
+  content        String
+  WorkSpace      WorkSpace? @relation(fields: [workSpaceId], references: [id])
+  workSpaceId    String?    @db.Uuid
+  accepted       Boolean    @default(false)
 }
 
-enum CosmosType {
+enum Type {
   PERSONAL
   PUBLIC
 }
 
-enum Type {
+enum WorkspaceType {
   PERSONAL
   PUBLIC
 }

@@ -1,7 +1,7 @@
 import {
   getAllUserVideos,
   getCosmos,
-  getCosmosFolders,
+  getFolders,
   verifyAccessToCosmos,
 } from "@/actions/cosmos";
 import { getNotifications, onAuthenticateUser } from "@/actions/user";
@@ -37,7 +37,7 @@ const CosmosLayout = async ({ params: { cosmosId }, children }: Props) => {
 
   await query.prefetchQuery({
     queryKey: ["cosmos-folders"],
-    queryFn: () => getCosmosFolders(cosmosId),
+    queryFn: () => getFolders(cosmosId),
   });
   await query.prefetchQuery({
     queryKey: ["user-videos"],

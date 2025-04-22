@@ -52,13 +52,13 @@ export const onAuthenticateUser = async () => {
         workspace: {
           create: {
             name: `${user.firstName}'s Workspace`,
-            type: "PERSONAL",
+            workspacetype: "PERSONAL",
           },
         },
         cosmos: {
           create: {
             name: `${user.firstName}'s Cosmos`,
-            cosmostype: "PERSONAL",
+            type: "PERSONAL",
           },
         },
       },

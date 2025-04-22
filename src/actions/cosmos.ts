@@ -41,22 +41,22 @@ export const verifyAccessToCosmos = async (cosmosId: string) => {
   }
 };
 
-export const getCosmosFolders = async (cosmosId: string) => {
+export const getFolders = async (cosmosId: string) => {
   try {
-    const isCosmosFolders = await client.cosmosFolder.findMany({
+    const isFolders = await client.folder.findMany({
       where: {
         cosmosId,
       },
       include: {
         _count: {
           select: {
-            cosmosvideos: true,
+            videos: true,
           },
         },
       },
     });
-    if (isCosmosFolders && isCosmosFolders.length > 0) {
-      return { status: 200, data: isCosmosFolders };
+    if (isFolders && isFolders.length > 0) {
+      return { status: 200, data: isFolders };
     }
     return { status: 404, data: [] };
   } catch (error) {
@@ -68,9 +68,9 @@ export const getAllUserVideos = async (cosmosId: string) => {
   try {
     const user = await currentUser();
     if (!user) return { status: 404 };
-    const cosmosVideos = await client.cosmosVideo.findMany({
+    const videos = await client.video.findMany({
       where: {
-        OR: [{ cosmosId }, { cosmosfolderId: cosmosId }],
+        OR: [{ cosmosId }, { folderId: cosmosId }],
       },
       select: {
         id: true,
@@ -78,7 +78,7 @@ export const getAllUserVideos = async (cosmosId: string) => {
         createdAt: true,
         source: true,
         processing: true,
-        CosmosFolder: {
+        Folder: {
           select: {
             id: true,
             name: true,
@@ -97,8 +97,8 @@ export const getAllUserVideos = async (cosmosId: string) => {
       },
     });
 
-    if (cosmosVideos && cosmosVideos.length > 0) {
-      return { status: 200, data: cosmosVideos };
+    if (videos && videos.length > 0) {
+      return { status: 200, data: videos };
     }
     return { status: 404 };
   } catch (error) {
@@ -126,7 +126,7 @@ export const getCosmos = async () => {
           select: {
             id: true,
             name: true,
-            cosmostype: true,
+            type: true,
           },
         },
         members: {
@@ -135,7 +135,7 @@ export const getCosmos = async () => {
               select: {
                 id: true,
                 name: true,
-                cosmostype: true,
+                type: true,
               },
             },
           },
