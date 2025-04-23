@@ -57,7 +57,7 @@ const CosmosLayout = async ({ params: { cosmosId }, children }: Props) => {
   return (
     <HydrationBoundary state={dehydrate(query)}>
       <ReduxProvider>
-        <div className="fixed inset-0 overflow-hidden bg-gradient-to-br from-[#111111] to-[#0D0D0D]">
+        <div className="fixed inset-0 overflow-hidden bg-black">
           <Desktop activeCosmosId={cosmosId} />
         </div>
       </ReduxProvider>

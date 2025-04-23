@@ -3,11 +3,11 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "@/redux/store";
 import { logEvent } from "@/redux/slices/debug";
-import { openWindow } from "@/redux/slices/windows";
 import WindowsManager from "./window/WindowsManager";
 import Dock from "./dock/Dock";
 import DebugPanel from "./debug/DebugPanel";
 import MenuBar from "./menu-bar";
+import { openWindow } from "@/redux/slices/windows";
 
 interface DesktopProps {
   activeCosmosId: string;
@@ -46,7 +46,7 @@ const Desktop = ({ activeCosmosId }: DesktopProps) => {
   }, [activeCosmosId, dispatch]);
 
   return (
-    <div className="w-full h-screen bg-[#4C4F69] overflow-hidden relative">
+    <div className="w-full h-screen overflow-hidden relative">
       {/* Menu Bar */}
       <MenuBar activeCosmosId={activeCosmosId} />
 

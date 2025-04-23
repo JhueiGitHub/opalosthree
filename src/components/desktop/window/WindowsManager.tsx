@@ -3,16 +3,32 @@
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import Window from "./Window";
-import { useAppSelector } from "@/redux/store";
+import { useAppSelector, useAppDispatch } from "@/redux/store";
 import OpalApp from "@/app/apps/opal/App";
+import { logEvent } from "@/redux/slices/debug";
 
 const WindowsManager = () => {
+  const dispatch = useAppDispatch();
   const { windows, focusedWindowId } = useAppSelector((state) => state.windows);
 
   // Create a sorted list of windows based on z-index
   const sortedWindows = Object.values(windows)
     .filter((window) => !window.isMinimized)
     .sort((a, b) => a.zIndex - b.zIndex);
+
+  // Log when windows change
+  useEffect(() => {
+    dispatch(
+      logEvent({
+        message: `Windows updated: ${sortedWindows.length} visible windows`,
+        data: {
+          windowCount: sortedWindows.length,
+          windowIds: sortedWindows.map((w) => w.id),
+          focusedWindowId,
+        },
+      })
+    );
+  }, [sortedWindows.length, focusedWindowId, dispatch]);
 
   return (
     <div className="fixed inset-0 z-10 pointer-events-none">
