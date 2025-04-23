@@ -232,7 +232,7 @@ const MenuBar = ({ activeCosmosId }: Props) => {
                 )}
               </div>
             </div>
-            <div className="h-full w-[1569px] flex flex-col">
+            <div className="h-full w-full flex flex-col">
               <InfoBar />
             </div>
           </div>
