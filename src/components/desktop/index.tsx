@@ -1,18 +1,6 @@
 "use client";
 
-import React from "react";
-import MenuBar from "./menu-bar";
-
-type Props = {
-  activeCosmosId: string;
-};
-
-const Desktop = ({ activeCosmosId }: Props) => {
-  return (
-    <div className="w-full h-full flex flex-col">
-      <MenuBar activeCosmosId={activeCosmosId} />
-    </div>
-  );
-};
+// This file re-exports the Desktop component for easy imports
+import Desktop from "./Desktop";
 
 export default Desktop;

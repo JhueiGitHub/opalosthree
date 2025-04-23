@@ -12,7 +12,9 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import Desktop from "@/components/desktop";
+// Import directly from the Desktop.tsx file to avoid any potential issues
+import Desktop from "@/components/desktop/Desktop";
+import { ReduxProvider } from "@/redux/provider";
 
 type Props = {
   params: {
@@ -54,9 +56,11 @@ const CosmosLayout = async ({ params: { cosmosId }, children }: Props) => {
 
   return (
     <HydrationBoundary state={dehydrate(query)}>
-      <div className="flex h-screen w-screen">
-        <Desktop activeCosmosId={cosmosId} />
-      </div>
+      <ReduxProvider>
+        <div className="fixed inset-0 overflow-hidden bg-gradient-to-br from-[#111111] to-[#0D0D0D]">
+          <Desktop activeCosmosId={cosmosId} />
+        </div>
+      </ReduxProvider>
     </HydrationBoundary>
   );
 };
