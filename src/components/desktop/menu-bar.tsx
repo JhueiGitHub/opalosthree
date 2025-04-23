@@ -98,7 +98,7 @@ const MenuBar = ({ activeCosmosId }: Props) => {
         </SelectTrigger>
         <SelectContent className="backdrop-blur-xl w-[99vw] h-[99vh] flex">
           <div className="w-full h-full flex">
-            <div className="w-[270px] bg-black bg-opacity-30 rounded-sm p-[6px]">
+            <div className="w-[270px] h-full bg-black bg-opacity-30 rounded-sm p-[6px] flex flex-col">
               <SelectGroup>
                 <SelectLabel>Cosmos'</SelectLabel>
               </SelectGroup>
@@ -175,7 +175,10 @@ const MenuBar = ({ activeCosmosId }: Props) => {
                 </div>
               )}
 
-              <nav className="w-full">
+              {/* This nav with the scrollable cosmos list */}
+              <nav className="w-full flex-1">
+                {" "}
+                {/* Add flex-1 here to allow it to grow */}
                 <ul className="h-[150px] overflow-auto overflow-x-hidden fade-layer">
                   {cosmos.cosmos.length > 0 &&
                     cosmos.cosmos.map(
@@ -212,7 +215,10 @@ const MenuBar = ({ activeCosmosId }: Props) => {
                     ))}
                 </ul>
               </nav>
-              <div className="fixed bottom-0 w-[170px]">
+              {/* Change this div to use mt-auto */}
+              <div className="relative w-full mt-auto">
+                {" "}
+                {/* Replace content-end with mt-auto */}
                 {cosmos.subscription?.plan === "FREE" && (
                   <GlobalCard
                     title="Upgrade to Pro"
