@@ -6,7 +6,7 @@ import {
 } from "@/actions/cosmos";
 import { getNotifications, onAuthenticateUser } from "@/actions/user";
 import { redirect } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   dehydrate,
   HydrationBoundary,
@@ -15,6 +15,9 @@ import {
 // Import directly from the Desktop.tsx file to avoid any potential issues
 import Desktop from "@/components/desktop/Desktop";
 import { ReduxProvider } from "@/redux/provider";
+import { setActiveCosmosId } from "@/redux/slices/activeCosmos";
+import { useAppDispatch } from "@/redux/store";
+import CosmosStateInitializer from "@/components/cosmos/CosmosStateInitializer";
 
 type Props = {
   params: {
@@ -57,8 +60,11 @@ const CosmosLayout = async ({ params: { cosmosId }, children }: Props) => {
   return (
     <HydrationBoundary state={dehydrate(query)}>
       <ReduxProvider>
+        <CosmosStateInitializer cosmosId={cosmosId} />
+
         <div className="fixed inset-0 overflow-hidden bg-black">
           <Desktop activeCosmosId={cosmosId} />
+          {children}
         </div>
       </ReduxProvider>
     </HydrationBoundary>

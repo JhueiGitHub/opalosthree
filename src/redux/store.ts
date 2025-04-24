@@ -6,6 +6,7 @@ import dockReducer from "./slices/dock";
 import debugReducer from "./slices/debug";
 import foldersReducer from "./slices/folders";
 import workspacesReducer from "./slices/workspaces";
+import activeCosmosReducer from "./slices/activeCosmos";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     debug: debugReducer,
     folders: foldersReducer,
     workspaces: workspacesReducer,
+    activeCosmos: activeCosmosReducer, // Add this line
     // Add any other existing reducers here
   },
   // Enable Redux DevTools in development
