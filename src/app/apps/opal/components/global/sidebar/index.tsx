@@ -17,11 +17,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { useAppSelector } from "@/redux/store";
 // ... other imports
 
 const Sidebar = () => {
   // Use our custom hook for cosmos navigation
   const { activeCosmosId, navigateToCosmos } = useCosmosNavigation();
+  // Get workspaces list from Redux
+  const workspaces = useAppSelector((state) => state.workspaces.workspaces);
 
   // Fetch cosmos data with your existing data hook
   const { data, isFetched } = userQueryData(["user-cosmos"], getCosmos);
@@ -42,7 +45,12 @@ const Sidebar = () => {
     <div className="bg-[#111111] flex-none relative p-4 h-full w-[250px] flex flex-col gap-4 items-center overflow-hidden">
       {/* Logo and header */}
       <div className="bg-[#111111] p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0 ">
-        <Image src="/opal-logo.svg" height={40} width={40} alt="logo" />
+        <Image
+          src="/apps/opal/opal-logo.svg"
+          height={40}
+          width={40}
+          alt="logo"
+        />
         <p className="text-2xl">Opal</p>
       </div>
 
